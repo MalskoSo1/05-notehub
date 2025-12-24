@@ -41,11 +41,11 @@ export async function fetchNotes(
 }
 
 export async function createNote(note: NewNote): Promise<Note> {
-  const response = await instance.post("/notes", note);
+  const response = await instance.post<Note>("/notes", note);
   return response.data;
 }
 
 export async function deleteNote(id: string): Promise<Note> {
-  const response = await instance.delete(`/notes/${id}`);
+  const response = await instance.delete<Note>(`/notes/${id}`);
   return response.data;
 }

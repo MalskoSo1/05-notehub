@@ -37,7 +37,7 @@ export default function App() {
   }
 
   const createNoteMutation = useMutation({
-    mutationKey: ["createCar"],
+    mutationKey: ["createNote"],
     mutationFn: (data: NewNote) => createNote(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getNotes"] });
@@ -50,7 +50,7 @@ export default function App() {
   };
 
   const deleteNoteMutation = useMutation({
-    mutationKey: ["deleteCar"],
+    mutationKey: ["deleteNote"],
     mutationFn: (id: string) => deleteNote(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getNotes"] });
