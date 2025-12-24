@@ -2,16 +2,30 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import css from "./NoteForm.module.css";
 import * as Yup from "yup";
 import type { NewNote, NoteTag } from "../../types/note";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { createNote } from "../../services/noteService";
+import type { Dispatch, SetStateAction } from "react";
 
 interface NoteFormProps {
   onClose: () => void;
-  createNote: (data: NewNote) => void;
+  setIsModalOpen: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function NoteForm({ onClose, createNote }: NoteFormProps) {
+export default function NoteForm({ onClose, setIsModalOpen }: NoteFormProps) {
+  const queryClient = useQueryClient();
+
   const handleSubmit = (data: FormValues) => {
-    createNote(data);
+    createNoteMutation.mutate(data);
   };
+
+  const createNoteMutation = useMutation({
+    mutationKey: ["createNote"],
+    mutationFn: (data: NewNote) => createNote(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["getNotes"] });
+      setIsModalOpen(false);
+    },
+  });
 
   const FormSchema = Yup.object().shape({
     title: Yup.string()
